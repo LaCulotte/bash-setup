@@ -18,10 +18,11 @@ clangd-conf-create() {
         esac
     done
 
+    # TODO : replace ~/workspace/bash-setup with dynamic discovery or env var
     if [[ "$ESP32" == "1" ]]; then
-        cp -i ~/.bashrc-scripts/templates/.clangd-esp32 ./.clangd
+        cp -i ~/workspace/bash-setup/templates/.clangd-esp32 ./.clangd
     else
-        cp -i ~/.bashrc-scripts/templates/.clangd-standard ./.clangd
+        cp -i ~/workspace/bash-setup/templates/.clangd-standard ./.clangd
     fi
 
     if [[ "$?" == "0" ]]; then 

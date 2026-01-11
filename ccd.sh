@@ -121,7 +121,7 @@ ccgo() {
             prompt="\033[1;31m$prompt <"
             __INPUT_HELPER_POS=$k
         fi
-        prompt="\033[0m$prompt"
+        prompt="$prompt\033[0m"
 
         i=$(expr $(expr $i + 1) % $CCD_SIZE)
         k=$(expr $(expr $k + 1) % $CCD_SIZE)
@@ -134,10 +134,15 @@ ccgo() {
         fi
     done
 
-    __input_helper "${arr[@]}"
+    local size=${#arr[@]}
+    if [[ "$size" -gt "$(tput lines)" ]]; then 
+        size=$(tput lines)
+    fi
+
+    menu_selector -r -i $current -L $size "${arr[@]}"
 
     if [[ "$?" == "0" ]]; then
-        local DST=$(expr $(expr $__INPUT_HELPER_RESULT + $CCD_TAIL) % $CCD_MAX)
+        local DST=$(expr $(expr $__MENU_SELECTOR_POS + $CCD_TAIL) % $CCD_MAX)
 
         builtin cd ${CCD_HISTORY[$DST]}
         CCD_POINTER=$(expr $(expr $DST + 1) % $(expr $CCD_SIZE + 1))
@@ -152,9 +157,3 @@ export CCD_HEAD=0
 export CCD_SIZE=0
 export CCD_POINTER=0
 export CCD_MAX=20
-
-alias cd="ccd"
-
-alias s="ccd_show"
-alias d="ucd"
-alias c="rcd"

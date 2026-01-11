@@ -120,9 +120,9 @@ function print_list_with_bound()
         else
             AEC_CLEAN_LINE 2
             if [[ -z $ms_list_num ]]; then
-                printf -- "${prefix}%s${suffix}" "${txti}"
+                printf -- "${prefix}${txti}${suffix}"
             else
-                printf -- "${i}${over_count} ${prefix}%s${suffix}" "${txti}"
+                printf -- "${i}${over_count} ${prefix}${txti}${suffix}"
             fi
             # TODO : option to print num-end...
         fi
