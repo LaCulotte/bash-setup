@@ -1,0 +1,53 @@
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+
+# PS1
+
+check_last_cmd(){    
+    if [ "$?" == "0" ]; then 
+        DOLLAR_COLOR="\e[0;32m";
+    else 
+        DOLLAR_COLOR="\e[0;31m";
+    fi
+
+}
+
+PROMPT_COMMAND='check_last_cmd;_check_curr_bookmark;'
+PS1='\[\e[0;32m\][\[\e[0;97m\]\w$_CURR_BOOKMARK_PROMPT_PS1\[\e[0;33m\]$_CURR_BOOKMARK_PS1\[\e[0;32m\]]\[$(echo -ne $DOLLAR_COLOR)\]\$ \[\e[0;0m\]'
+
+# Custom commands
+
+alias reload="source ~/.bashrc"
+
+alias b="bookmark"
+complete -F _bookmark_complete b
+
+alias ws="bookmark g ws"
+alias bg="bookmark g"
+alias bgb="bookmark gb"
+complete -F _bookmark_complete_file bg
+complete -F _bookmark_complete_file bgb
+
+alias cd="ccd"
+
+alias s="ccd_show"
+alias d="ucd"
+alias c="rcd"
+
+alias ws="cd ~/workspace"
+
+# Custom scripts
+
+source $SCRIPT_DIR/framework/confirm.sh
+source $SCRIPT_DIR/lbashutils/menu_selector.sh
+source $SCRIPT_DIR/ccd.sh
+source $SCRIPT_DIR/bookmarks.sh
+
+# --- nvim ---
+source $SCRIPT_DIR/clang-conf.sh
+source $SCRIPT_DIR/workspaces.sh
