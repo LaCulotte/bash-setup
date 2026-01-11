@@ -1,0 +1,9 @@
+CompileFlags:
+    Add: [
+            -std=c++23,
+            # -stdlib=libc++,
+            -D__cpp_concepts=202002L,
+
+            -I${pwd}/src,
+            #-I${pwd}/src,
+        ]

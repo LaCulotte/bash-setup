@@ -1,0 +1,16 @@
+CompileFlags:
+    Add: [
+            # TODO : redo with proper path !!
+            -I/home/me/temp/esp-clang/lib/clang-runtimes/xtensa-esp-unknown-elf/include/c++/13.2.0/, 
+            -I/home/me/temp/esp-clang/lib/clang-runtimes/xtensa-esp-unknown-elf/esp32/include/,
+            -I/home/me/temp/esp-clang/lib/clang-runtimes/xtensa-esp-unknown-elf/esp32/include/c++/13.2.0/,
+
+            -std=c++23,
+            # -stdlib=libc++,
+            -D__cpp_concepts=202002L,
+
+            -I${pwd}/main,
+            #-I${pwd}/src,
+        ]
+  
+    Remove: [-fno-tree-switch-conversion, -mtext-section-literals, -mlongcalls, -fstrict-volatile-bitfields, -fno-shrink-wrap]
