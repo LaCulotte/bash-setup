@@ -1,3 +1,5 @@
+# Meta : Get script dir
+
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do
   DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
@@ -19,6 +21,10 @@ check_last_cmd(){
 
 PROMPT_COMMAND='check_last_cmd;_check_curr_bookmark;'
 PS1='\[\e[0;32m\][\[\e[0;97m\]\w$_CURR_BOOKMARK_PROMPT_PS1\[\e[0;33m\]$_CURR_BOOKMARK_PS1\[\e[0;32m\]]\[$(echo -ne $DOLLAR_COLOR)\]\$ \[\e[0;0m\]'
+
+# Bin
+
+PATH="$PATH:$SCRIPT_DIR/bin"
 
 # Custom commands
 
