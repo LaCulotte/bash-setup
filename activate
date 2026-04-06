@@ -8,6 +8,18 @@ while [ -h "$SOURCE" ]; do
 done
 SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
 
+# gitstatus
+
+source $SCRIPT_DIR/gitstatus/gitstatus.prompt.sh
+
+sanatize_prompt() {
+    if [ "${GITSTATUS_PROMPT}" == "" ]; then
+        GITSTATUS_PROMPT=""
+    else
+        GITSTATUS_PROMPT="\e[0;32m(${GITSTATUS_PROMPT}\e[0;32m)"
+    fi
+}
+
 # PS1
 
 check_last_cmd(){    
@@ -16,11 +28,15 @@ check_last_cmd(){
     else 
         DOLLAR_COLOR="\e[0;31m";
     fi
-
 }
 
-PROMPT_COMMAND='check_last_cmd;_check_curr_bookmark;'
-PS1='\[\e[0;32m\][\[\e[0;97m\]\w$_CURR_BOOKMARK_PROMPT_PS1\[\e[0;33m\]$_CURR_BOOKMARK_PS1\[\e[0;32m\]]\[$(echo -ne $DOLLAR_COLOR)\]\$ \[\e[0;0m\]'
+if [ "$PROMPT_COMMAND" != "" ]; then
+    PROMPT_COMMAND="check_last_cmd;_check_curr_bookmark;$PROMPT_COMMAND;sanatize_prompt"
+else
+    PROMPT_COMMAND="check_last_cmd;_check_curr_bookmark;sanatize_prompt"
+fi
+
+PS1='\[\e[0;32m\][\[\e[0;97m\]\w$_CURR_BOOKMARK_PROMPT_PS1\[\e[0;33m\]$_CURR_BOOKMARK_PS1\[\e[0;32m\]]$(echo -ne $GITSTATUS_PROMPT)\[$(echo -ne $DOLLAR_COLOR)\]\$ \[\e[0;0m\]'
 
 # Bin
 
