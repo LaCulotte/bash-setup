@@ -63,6 +63,8 @@ alias c="rcd"
 
 alias ws="cd ~/workspace"
 
+alias python-server="python3 -m http.server"
+
 # Custom scripts
 
 source $SCRIPT_DIR/framework/confirm.sh
