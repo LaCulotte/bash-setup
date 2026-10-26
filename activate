@@ -13,10 +13,10 @@ SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
 source $SCRIPT_DIR/gitstatus/gitstatus.prompt.sh
 
 sanatize_prompt() {
-    if [ "${GITSTATUS_PROMPT}" == "" ]; then
-        GITSTATUS_PROMPT=""
+    if [[ -n "$GITSTATUS_PROMPT" ]]; then
+        GITSTATUS_PROMPT=$'\001\e[0;32m\002('"$GITSTATUS_PROMPT"$'\001\e[0;32m\002)'
     else
-        GITSTATUS_PROMPT="\e[0;32m(${GITSTATUS_PROMPT}\e[0;32m)"
+        GITSTATUS_PROMPT=""
     fi
 }
 
@@ -30,13 +30,45 @@ check_last_cmd(){
     fi
 }
 
-if [ "$PROMPT_COMMAND" != "" ]; then
-    PROMPT_COMMAND="check_last_cmd;_check_curr_bookmark;$PROMPT_COMMAND;sanatize_prompt"
-else
-    PROMPT_COMMAND="check_last_cmd;_check_curr_bookmark;sanatize_prompt"
-fi
+_bash_setup_prompt_command_has() {
+    local command="$1"
+    local prompt_command="${PROMPT_COMMAND//$'\n'/;}"
 
-PS1='\[\e[0;32m\][\[\e[0;97m\]\w$_CURR_BOOKMARK_PROMPT_PS1\[\e[0;33m\]$_CURR_BOOKMARK_PS1\[\e[0;32m\]]$(echo -ne $GITSTATUS_PROMPT)\[$(echo -ne $DOLLAR_COLOR)\]\$ \[\e[0;0m\]'
+    [[ ";$prompt_command;" == *";$command;"* ]]
+}
+
+_bash_setup_prompt_command_prepend() {
+    local command="$1"
+
+    _bash_setup_prompt_command_has "$command" && return
+
+    if [[ -n "$PROMPT_COMMAND" ]]; then
+        PROMPT_COMMAND="$command"$'\n'"$PROMPT_COMMAND"
+    else
+        PROMPT_COMMAND="$command"
+    fi
+}
+
+_bash_setup_prompt_command_append() {
+    local command="$1"
+
+    _bash_setup_prompt_command_has "$command" && return
+
+    if [[ -n "$PROMPT_COMMAND" ]]; then
+        # Remove trailing newlines before appending the command.
+        while [[ "$PROMPT_COMMAND" == *$'\n' ]]; do
+            PROMPT_COMMAND="${PROMPT_COMMAND%$'\n'}"
+        done
+        PROMPT_COMMAND+=$'\n'"$command"
+    else
+        PROMPT_COMMAND="$command"
+    fi
+}
+
+_bash_setup_prompt_command_append sanatize_prompt
+_bash_setup_prompt_command_prepend _check_curr_bookmark
+_bash_setup_prompt_command_prepend check_last_cmd
+PS1='\[\e[0;32m\][\[\e[0;37m\]\t\[\e[0;32m\]][\[\e[0;97m\]\w$_CURR_BOOKMARK_PROMPT_PS1\[\e[0;33m\]$_CURR_BOOKMARK_PS1\[\e[0;32m\]]${GITSTATUS_PROMPT}\[$(echo -ne $DOLLAR_COLOR)\]\$ \[\e[0;0m\]'
 
 # Bin
 
