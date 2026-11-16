@@ -1,5 +1,3 @@
-WORKSPACE_EDITOR="nvim"
-
 workspace-add() {
     if [[ "$#" != 2 ]]; then 
         echo "Usage : workspace-add <name> <dirs...>"

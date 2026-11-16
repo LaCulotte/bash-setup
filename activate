@@ -1,16 +1,16 @@
 # Meta : Get script dir
 
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-  DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
-  SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+BASH_SETUP_SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$BASH_SETUP_SOURCE" ]; do
+  DIR="$(cd -P "$(dirname "$BASH_SETUP_SOURCE")" >/dev/null 2>&1 && pwd)"
+  BASH_SETUP_SOURCE="$(readlink "$BASH_SETUP_SOURCE")"
+  [[ $BASH_SETUP_SOURCE != /* ]] && BASH_SETUP_SOURCE="$DIR/$BASH_SETUP_SOURCE"
 done
-SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+BASH_SETUP_SCRIPT_DIR="$(cd -P "$(dirname "$BASH_SETUP_SOURCE")" >/dev/null 2>&1 && pwd)"
 
 # gitstatus
 
-source $SCRIPT_DIR/gitstatus/gitstatus.prompt.sh
+source $BASH_SETUP_SCRIPT_DIR/gitstatus/gitstatus.prompt.sh
 
 sanatize_prompt() {
     if [[ -n "$GITSTATUS_PROMPT" ]]; then
@@ -72,7 +72,7 @@ PS1='\[\e[0;32m\][\[\e[0;37m\]\t\[\e[0;32m\]][\[\e[0;97m\]\w$_CURR_BOOKMARK_PROM
 
 # Bin
 
-PATH="$PATH:$SCRIPT_DIR/bin"
+PATH="$PATH:$BASH_SETUP_SCRIPT_DIR/bin"
 
 # Custom commands
 
@@ -97,13 +97,17 @@ alias ws="cd ~/workspace"
 
 alias python-server="python3 -m http.server"
 
+# User flags
+
+source $BASH_SETUP_SCRIPT_DIR/user-flags.sh
+
 # Custom scripts
 
-source $SCRIPT_DIR/framework/confirm.sh
-source $SCRIPT_DIR/lbashutils/menu_selector.sh
-source $SCRIPT_DIR/ccd.sh
-source $SCRIPT_DIR/bookmarks.sh
+source $BASH_SETUP_SCRIPT_DIR/framework/confirm.sh
+source $BASH_SETUP_SCRIPT_DIR/lbashutils/menu_selector.sh
+source $BASH_SETUP_SCRIPT_DIR/ccd.sh
+source $BASH_SETUP_SCRIPT_DIR/bookmarks.sh
 
 # --- nvim ---
-source $SCRIPT_DIR/clang-conf.sh
-source $SCRIPT_DIR/workspaces.sh
+source $BASH_SETUP_SCRIPT_DIR/clang-conf.sh
+source $BASH_SETUP_SCRIPT_DIR/workspaces.sh
