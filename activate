@@ -107,6 +107,7 @@ source $BASH_SETUP_SCRIPT_DIR/framework/confirm.sh
 source $BASH_SETUP_SCRIPT_DIR/lbashutils/menu_selector.sh
 source $BASH_SETUP_SCRIPT_DIR/ccd.sh
 source $BASH_SETUP_SCRIPT_DIR/bookmarks.sh
+source $BASH_SETUP_SCRIPT_DIR/esp-idf-utils.sh
 
 # --- nvim ---
 source $BASH_SETUP_SCRIPT_DIR/clang-conf.sh
